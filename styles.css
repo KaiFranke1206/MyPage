@@ -1,0 +1,74 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #4b6cb7, #182848);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+/* Container */
+.container {
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 90%;
+  max-width: 400px;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+/* Profile */
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #f0f4ff;
+}
+
+p {
+  font-size: 15px;
+  color: #d0d6e0;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+/* Links */
+.links {
+  display: flex;
+  flex-direction: column;
+}
+
+.link-button {
+  text-decoration: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.link-button:hover {
+  background: linear-gradient(135deg, #525cfc, #9f7aea);
+  transform: translateY(-3px);
+}
