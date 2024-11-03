@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Spiel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="blackjack-table">
+        <div class="table">
+            <div class="card-stack-area">
+                <div id="card-stack" class="card-back"></div>
+            </div>
+            <div class="discard-pile-area">
+                <div id="discard-pile"></div>
+            </div>
+            <div class="chip-area">
+                <label for="bet-amount">Wette:</label>
+                <input type="number" id="bet-amount" value="10" min="1">
+                <button id="bet-button">Wette setzen</button>
+                <div class="chips">Chips: <span id="chips">100</span></div>
+            </div>
+            <div class="dealer-area">
+                <h2>Dealer's Hand</h2>
+                <div id="dealer-hand" class="card-hand"></div>
+            </div>
+            <div class="player-area">
+                <h2>Deine Hand</h2>
+                <div id="player-hand" class="card-hand"></div>
+            </div>
+            <div class="controls">
+                <button id="hit-button" disabled>Schlag</button>
+                <button id="stand-button" disabled>Stand</button>
+                <button id="double-button" disabled>DVerdoppeln</button>
+                <button id="split-button" disabled>Teilen</button>
+                <button id="insure-button" disabled>Versichern</button>
+                <button id="decline-insurance-button" disabled>Versicherung Ablehnen</button> <!-- New Button -->
+                <button id="restart-button">Neustart</button>
+            </div>            
+            <div class="message-board">
+                <p id="message" aria-live="polite"></p>
+            </div>            
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
