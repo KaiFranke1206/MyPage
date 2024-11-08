@@ -1,87 +1,73 @@
+# main.py: A basic CPU simulator
+
 class CPU:
     def __init__(self):
-        self.pc = 0       # Program Counter
-        self.sp = 0xFF    # Stack Pointer
-        self.acc = 0      # Accumulator
-        self.xreg = 0     # X Register
-        self.yreg = 0     # Y Register
-        # Flags
-        self.c = False    # Carry Flag
-        self.z = False    # Zero Flag
-        self.i = False    # Interrupt Disable Flag
-        self.d = False    # Decimal Mode Flag
-        self.b = False    # Break Command Flag
-        self.v = False    # Overflow Flag
-        self.n = False    # Negative Flag
+        self.registers = {'R1': 0, 'R2': 0, 'R3': 0}
+        self.ram = [0] * 10  # Example RAM with 10 memory cells
+        self.pc = 0  # Program counter
+        self.instructions = []
+        self.running = True
 
-    def reset(self):
-        """Resets the CPU to its initial state."""
-        self.pc = 0
-        self.sp = 0xFF
-        self.acc = self.xreg = self.yreg = 0
-        self.c = self.z = self.i = self.d = self.b = self.v = self.n = False
+    def load_instructions(self, instructions):
+        """Loads instructions into the CPU."""
+        self.instructions = instructions.splitlines()
 
-    def set_flags(self, value):
-        """Sets Zero and Negative flags based on the given value."""
-        self.z = (value == 0)
-        self.n = (value & 0x80) != 0
+    def execute_next(self):
+        """Executes the next instruction and updates the CPU state."""
+        if self.pc >= len(self.instructions) or not self.running:
+            self.running = False
+            return {'registers': self.registers.copy(), 'ram': self.ram.copy(), 'pc': self.pc}
 
-    def execute_instruction(self, opcode, mem):
-        """Executes a single instruction based on the provided opcode."""
-        if opcode == 0x69:  # ADC Immediate
-            value = mem.read_byte(self.pc + 1)
-            self.adc(value)
-            self.pc += 2
-        elif opcode == 0x65:  # ADC Zero Page
-            address = mem.read_byte(self.pc + 1)
-            value = mem.read_byte(address)
-            self.adc(value)
-            self.pc += 2
-        else:
-            raise NotImplementedError(f"Unknown Opcode {opcode:02X}")
+        current_instruction = self.instructions[self.pc].strip().split()
+        if not current_instruction:
+            self.pc += 1
+            return self.get_state()
 
-    def adc(self, value):
-        """Performs ADC (Add with Carry) operation."""
-        carry_in = 1 if self.c else 0
-        result = self.acc + value + carry_in
-        self.c = result > 0xFF
-        result &= 0xFF
-        self.v = ((self.acc ^ result) & (value ^ result) & 0x80) != 0
-        self.acc = result
-        self.set_flags(self.acc)
+        operation = current_instruction[0].upper()
 
-        print(f"*ACTION* Accumulator updated to {self.acc:02X} after ADC {value:02X}")
+        if operation == 'LOAD':
+            reg, value = current_instruction[1], int(current_instruction[2])
+            self.registers[reg] = value
 
-class Mem:
-    def __init__(self):
-        self.ram = [0] * 65536  # 64KB of memory
+        elif operation == 'STORE':
+            reg, address = current_instruction[1], int(current_instruction[2])
+            self.ram[address] = self.registers[reg]
 
-    def read_byte(self, address):
-        """Reads a byte from the specified memory address."""
-        return self.ram[address % 65536]
+        elif operation == 'ADD':
+            reg1, reg2 = current_instruction[1], current_instruction[2]
+            self.registers[reg1] += self.registers[reg2]
 
-    def write_byte(self, address, value):
-        """Writes a byte to the specified memory address."""
-        self.ram[address % 65536] = value & 0xFF
+        elif operation == 'SUB':
+            reg1, reg2 = current_instruction[1], current_instruction[2]
+            self.registers[reg1] -= self.registers[reg2]
 
-    def load_program(self, program, start_address=0x00):
-        """Loads a program into memory starting at the given address."""
-        for i, byte in enumerate(program):
-            self.write_byte(start_address + i, byte)
+        elif operation == 'JMP':
+            address = int(current_instruction[1])
+            self.pc = address
+            return self.get_state()
 
-# Example usage
-cpu = CPU()
-mem = Mem()
+        elif operation == 'HALT':
+            self.running = False
 
-# Load a program to test ADC Immediate and Zero Page addressing modes
-program = [
-    0x69, 0x10,  # ADC #$10 (Immediate)
-    0x65, 0x02   # ADC $02 (Zero Page)
-]
-mem.load_program(program)
-mem.write_byte(0x02, 0x20)  # Set value at zero page address 0x02
+        self.pc += 1
+        return self.get_state()
 
-# Execute the program
-while cpu.pc < len(program):
-    opcode = mem.read_byte(cpu.pc)
-    cpu.execute_instruction(opcode, mem)
+    def get_state(self):
+        """Returns the current state of the CPU."""
+        return {
+            'registers': self.registers.copy(),
+            'ram': self.ram.copy(),
+            'pc': self.pc
+        }
+
+def run_simulation(input_code):
+    """Runs the simulation step-by-step and returns the state after each instruction."""
+    cpu = CPU()
+    cpu.load_instructions(input_code)
+    states = []
+
+    while cpu.running:
+        state = cpu.execute_next()
+        states.append(state)
+
+    return states
