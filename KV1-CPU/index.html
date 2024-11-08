@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Simulator IDE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>CPU Simulator IDE</h1>
+        <div class="editor-section">
+            <textarea id="codeInput" placeholder="Enter your CPU instructions here..."></textarea>
+            <button id="runButton">Run Simulation</button>
+            <label for="clockSpeed">Clock Speed (ms):</label>
+            <input type="range" id="clockSpeed" min="100" max="2000" step="100" value="1000">
+            <span id="clockSpeedValue">1000 ms</span>
+        </div>
+        <div class="output-section">
+            <h2>CPU State</h2>
+            <div id="cpuState">
+                <pre id="registersOutput">Registers: </pre>
+                <pre id="ramOutput">RAM: </pre>
+                <pre id="pcOutput">Program Counter: </pre>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
