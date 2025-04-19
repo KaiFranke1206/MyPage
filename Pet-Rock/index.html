@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rocknar: Legacy of Stone</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🪨 Rocknar: Legacy of Stone</h1>
+  <img id="pet-rock" src="rock.png" alt="Rocknar the Resolute" />
+
+  <div class="stats">
+    <div>Hunger: <span id="hunger">50</span></div>
+    <div>Fun: <span id="fun">50</span></div>
+    <div>Energy: <span id="energy">50</span></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="feedRock()" id="feedBtn">🍗 Nourish</button>
+    <button onclick="playWithRock()" id="playBtn">🎭 Entertain</button>
+    <button onclick="restRock()" id="restBtn">🛌 Restore</button>
+    <button onclick="openMinigame()">⚔️ Enter Trial</button>
+    <button onclick="collectFun()">✨ Absorb Joy</button>
+    <button onclick="showLore()">📜 View Lore</button>
+    <button onclick="trainRock()">🛡️ Train</button>
+    <button onclick="fightCoalLord()" id="fightBtn" disabled>⚔️ Fight Coal Lord</button>
+  </div>
+
+  <div id="message"></div>
+
+  <div id="lore" style="display: none; margin-top: 30px; background: #fff9e6; padding: 20px; border-radius: 10px;">
+    <h2>📖 The Tale of Rocknar</h2>
+    <p><strong>Prologue:</strong> Born of stormfire in the Valley of Stillness, Rocknar awakens as the first Stonekind. Once dormant, now destined for legend.</p>
+    <p><strong>Love:</strong> In the Amethyst Forest, Rocknar finds Selene, the Crystal Muse. Their bond echoes across the mountain winds.</p>
+    <p><strong>War:</strong> As the Coal Lord rises, Rocknar must wield the Obsidian Blade and defend Shatterhold against molten terrors.</p>
+    <p><strong>Loss:</strong> Selene is lost to the shadows, her essence trapped in obsidian. Rocknar carries her shard, seeking redemption.</p>
+    <p><strong>Destiny:</strong> Only with your guidance—your care—can Rocknar retrieve the Tears of Gaia and restore his beloved, becoming Guardian of the Realms.</p>
+    <button onclick="hideLore()">🔙 Return</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
