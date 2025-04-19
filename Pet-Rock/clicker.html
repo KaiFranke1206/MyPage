@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clicker Minigame</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #dff0d8;
+      padding: 40px;
+    }
+    button {
+      font-size: 20px;
+      padding: 20px 40px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🖱️ Click the Rock!</h1>
+  <p>Click the button as much as you can in 10 seconds!</p>
+  <button onclick="clickRock()">Click Me!</button>
+  <p>Clicks: <span id="clickCount">0</span></p>
+  <p id="status"></p>
+
+  <script>
+    let count = 0;
+    let timer = 10;
+    let active = true;
+
+    const clickCountEl = document.getElementById("clickCount");
+    const statusEl = document.getElementById("status");
+
+    function clickRock() {
+      if (!active) return;
+      count++;
+      clickCountEl.textContent = count;
+    }
+
+    setTimeout(() => {
+      active = false;
+      localStorage.setItem("funPoints", count);
+      statusEl.textContent = `Time's up! You earned ${count} fun points. You can now collect them in the main game. 🎉`;
+    }, timer * 1000);
+  </script>
+</body>
+</html>

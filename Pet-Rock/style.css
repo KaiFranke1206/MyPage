@@ -1,0 +1,32 @@
+body {
+    font-family: 'Comic Sans MS', cursive;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 40px;
+  }
+  
+  #pet-rock {
+    width: 200px;
+    height: auto;
+    box-shadow: 0 0 10px #555;
+    transition: 0.3s ease;
+  }
+  
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .stats {
+    font-size: 18px;
+    margin: 15px 0;
+  }
+  
+  #message {
+    font-size: 24px;
+    color: darkred;
+    margin-top: 20px;
+  }
+  

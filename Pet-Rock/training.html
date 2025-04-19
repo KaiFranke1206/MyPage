@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Minigame</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f0e68c;
+      padding: 40px;
+    }
+    button {
+      font-size: 20px;
+      padding: 15px 30px;
+      cursor: pointer;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛡️ Training Rocknar!</h1>
+  <p>Complete the challenges to increase Rocknar's strength.</p>
+  
+  <button onclick="completeChallenge()">💪 Complete Challenge</button>
+  <p>Strength: <span id="strength">0</span></p>
+
+  <script>
+    let strength = 0;
+
+    function completeChallenge() {
+      const points = Math.floor(Math.random() * 20) + 5; // Random points between 5 and 20
+      strength += points;
+
+      document.getElementById("strength").textContent = strength;
+      alert(`Challenge complete! Rocknar gained ${points} strength!`);
+
+      // Notify the main game of the new strength
+      if (window.opener && window.opener.collectTrainingPoints) {
+        window.opener.collectTrainingPoints(points);
+      }
+
+      // Close the minigame after training
+      if (strength >= 100) {
+        alert("Rocknar is now trained enough to fight the Coal Lord!");
+        window.close(); // Close the minigame
+      }
+    }
+  </script>
+</body>
+</html>
