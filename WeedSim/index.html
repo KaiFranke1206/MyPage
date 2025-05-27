@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weed Smoking Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="story" class="story">
+    <h2>Welcome to the Chill Zone</h2>
+    <p>You're Kai "HighByte" Franke, elite coder of the neon 80s. Your secret? You code best when blazin'.</p>
+    <button onclick="startSimulator()">Enter the Chill Zone</button>
+  </div>
+
+  <div class="simulator">
+    <h1>Weed Smoking Simulator</h1>
+    <div class="joint-container">
+      <img id="joint" src="joint.png" alt="Joint">
+      <div id="smoke-container"></div>
+    </div>
+    <button id="inhale">Inhale</button>
+    <p id="status">Ready to chill?</p>
+
+    <div id="stats" class="stats"></div>
+    <div class="meter-label">Highness Level</div>
+    <div class="meter-bg">
+      <div id="high-meter" class="meter-fill"></div>
+    </div>
+    <audio id="inhale-sound" src="inhale.mp3" preload="auto"></audio>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
