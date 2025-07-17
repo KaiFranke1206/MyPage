@@ -2,24 +2,48 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bingo Card</title>
+<title>Bingo Cards</title>
 <style>
   body {
     font-family: "Segoe UI", Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     background: linear-gradient(135deg, #c9d6ff, #e2e2e2);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
   }
-  #bingo {
+  h1 {
+    color: #34568B;
+    margin-bottom: 10px;
+  }
+  .controls {
+    margin-bottom: 20px;
+  }
+  select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #34568B;
+    background: #f0f6ff;
+    color: #34568B;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .bingo {
     display: grid;
-    grid-template-columns: repeat(5, 90px);
-    grid-template-rows: repeat(6, 90px);
-    gap: 8px;
+    grid-template-columns: repeat(5, 70px);
+    grid-template-rows: repeat(6, 70px);
+    gap: 6px;
     background: #ffffffcc;
-    padding: 15px;
-    border-radius: 15px;
+    padding: 12px;
+    border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
   .cell {
@@ -27,9 +51,9 @@
     justify-content: center;
     align-items: center;
     background: #f0f6ff;
-    border-radius: 12px;
+    border-radius: 10px;
     border: 2px solid #a3c4f3;
-    font-size: 22px;
+    font-size: 18px;
     color: #34568B;
     font-weight: 600;
     cursor: pointer;
@@ -44,7 +68,7 @@
     background: #34568B;
     color: white;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
     cursor: default;
     box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
   }
@@ -57,10 +81,23 @@
 </style>
 </head>
 <body>
-<div id="bingo"></div>
+
+<h1>🎲 Bingo Cards</h1>
+<div class="controls">
+  <label for="cardCount">Number of cards: </label>
+  <select id="cardCount">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+  </select>
+</div>
+
+<div class="cards-container" id="cardsContainer"></div>
 
 <script>
-  const bingoContainer = document.getElementById("bingo");
   const letters = ["B", "I", "N", "G", "O"];
   const ranges = {
     B: [1, 15],
@@ -79,16 +116,19 @@
     return nums;
   }
 
-  function generateCard() {
-    // Add headers
+  function createBingoCard() {
+    const bingo = document.createElement("div");
+    bingo.className = "bingo";
+
+    // Headers
     letters.forEach(letter => {
       const header = document.createElement("div");
       header.textContent = letter;
       header.className = "cell header";
-      bingoContainer.appendChild(header);
+      bingo.appendChild(header);
     });
 
-    // Add numbers
+    // Numbers
     letters.forEach((letter, colIndex) => {
       let numbers = getRandomNumbers(ranges[letter][0], ranges[letter][1], 5);
       numbers.forEach((num, rowIndex) => {
@@ -103,8 +143,30 @@
             cell.classList.toggle("marked");
           });
         }
-        bingoContainer.appendChild(cell);
+        bingo.appendChild(cell);
       });
+    });
+
+    return bingo;
+  }
+
+  function generateCards(count) {
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      container.appendChild(createBingoCard());
+    }
+  }
+
+  // Initial generation
+  const cardCount = document.getElementById("cardCount");
+  cardCount.addEventListener("change", () => generateCards(parseInt(cardCount.value)));
+  generateCards(1);
+</script>
+
+</body>
+</html>
+
     });
   }
 
