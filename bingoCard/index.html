@@ -120,37 +120,38 @@
     const bingo = document.createElement("div");
     bingo.className = "bingo";
 
-    // Create an array to store all cells in proper order (column by column)
-    const cells = [];
-
-    // First, push headers
-    for (let c = 0; c < 5; c++) {
-      cells.push({ text: letters[c], class: "cell header" });
-    }
-
-    // Then, push numbers row by row (top to bottom)
-    for (let r = 0; r < 5; r++) {
-      for (let c = 0; c < 5; c++) {
-        if (c === 2 && r === 2) {
-          cells.push({ text: "FREE", class: "cell marked" });
-        } else {
-          const num = getRandomNumbers(ranges[letters[c]][0], ranges[letters[c]][1], 5)[r];
-          cells.push({ text: num, class: "cell" });
-        }
-      }
-    }
-
-    // Append cells to bingo grid
-    cells.forEach(cellData => {
-      const cell = document.createElement("div");
-      cell.textContent = cellData.text;
-      cell.className = cellData.class;
-      if (!cell.classList.contains("header") && cell.textContent !== "FREE") {
-        cell.addEventListener("click", () => cell.classList.toggle("marked"));
-      }
-      bingo.appendChild(cell);
+    // First: headers
+    letters.forEach(letter => {
+      const header = document.createElement("div");
+      header.textContent = letter;
+      header.className = "cell header";
+      bingo.appendChild(header);
     });
 
+    // Generate all 5 columns with unique numbers
+    const columnNumbers = {};
+    letters.forEach(letter => {
+      columnNumbers[letter] = getRandomNumbers(ranges[letter][0], ranges[letter][1], 5);
+    });
+
+    // Fill 5 rows (row by row, left to right)
+    for (let r = 0; r < 5; r++) {
+      for (let c = 0; c < 5; c++) {
+        const letter = letters[c];
+        const cell = document.createElement("div");
+
+        if (c === 2 && r === 2) {
+          // FREE space in middle
+          cell.textContent = "FREE";
+          cell.className = "cell marked";
+        } else {
+          cell.textContent = columnNumbers[letter][r];
+          cell.className = "cell";
+          cell.addEventListener("click", () => cell.classList.toggle("marked"));
+        }
+        bingo.appendChild(cell);
+      }
+    }
     return bingo;
   }
 
@@ -162,7 +163,6 @@
     }
   }
 
-  // Initial generation
   const cardCount = document.getElementById("cardCount");
   cardCount.addEventListener("change", () => generateCards(parseInt(cardCount.value)));
   generateCards(1);
