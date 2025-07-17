@@ -120,31 +120,35 @@
     const bingo = document.createElement("div");
     bingo.className = "bingo";
 
-    // Headers
-    letters.forEach(letter => {
-      const header = document.createElement("div");
-      header.textContent = letter;
-      header.className = "cell header";
-      bingo.appendChild(header);
-    });
+    // Create an array to store all cells in proper order (column by column)
+    const cells = [];
 
-    // Numbers
-    letters.forEach((letter, colIndex) => {
-      let numbers = getRandomNumbers(ranges[letter][0], ranges[letter][1], 5);
-      numbers.forEach((num, rowIndex) => {
-        const cell = document.createElement("div");
-        if (colIndex === 2 && rowIndex === 2) {
-          cell.textContent = "FREE";
-          cell.className = "cell marked";
+    // First, push headers
+    for (let c = 0; c < 5; c++) {
+      cells.push({ text: letters[c], class: "cell header" });
+    }
+
+    // Then, push numbers row by row (top to bottom)
+    for (let r = 0; r < 5; r++) {
+      for (let c = 0; c < 5; c++) {
+        if (c === 2 && r === 2) {
+          cells.push({ text: "FREE", class: "cell marked" });
         } else {
-          cell.textContent = num;
-          cell.className = "cell";
-          cell.addEventListener("click", () => {
-            cell.classList.toggle("marked");
-          });
+          const num = getRandomNumbers(ranges[letters[c]][0], ranges[letters[c]][1], 5)[r];
+          cells.push({ text: num, class: "cell" });
         }
-        bingo.appendChild(cell);
-      });
+      }
+    }
+
+    // Append cells to bingo grid
+    cells.forEach(cellData => {
+      const cell = document.createElement("div");
+      cell.textContent = cellData.text;
+      cell.className = cellData.class;
+      if (!cell.classList.contains("header") && cell.textContent !== "FREE") {
+        cell.addEventListener("click", () => cell.classList.toggle("marked"));
+      }
+      bingo.appendChild(cell);
     });
 
     return bingo;
