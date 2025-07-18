@@ -29,6 +29,7 @@
     color: #34568B;
     font-size: 16px;
     cursor: pointer;
+    margin-left: 6px;
   }
   .cards-container {
     display: flex;
@@ -38,8 +39,6 @@
   }
   .bingo {
     display: grid;
-    grid-template-columns: repeat(5, 70px);
-    grid-template-rows: repeat(6, 70px);
     gap: 6px;
     background: #ffffffcc;
     padding: 12px;
@@ -78,13 +77,33 @@
     border-color: #2c5aa0;
     transform: scale(0.95);
   }
+  /* Special sizes */
+  .bingo-75 {
+    grid-template-columns: repeat(5, 70px);
+    grid-template-rows: repeat(6, 70px);
+  }
+  .bingo-90 {
+    grid-template-columns: repeat(9, 50px);
+    grid-template-rows: repeat(3, 50px);
+  }
+  .bingo-30 {
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+  }
 </style>
 </head>
 <body>
 
 <h1>🎲 Bingo Cards</h1>
 <div class="controls">
-  <label for="cardCount">Number of cards: </label>
+  <label for="gameType">Game Type: </label>
+  <select id="gameType">
+    <option value="75">75-Ball</option>
+    <option value="90">90-Ball</option>
+    <option value="30">30-Ball</option>
+  </select>
+
+  <label for="cardCount">Cards: </label>
   <select id="cardCount">
     <option value="1">1</option>
     <option value="2">2</option>
@@ -116,11 +135,11 @@
     return nums;
   }
 
-  function createBingoCard() {
+  function create75BallCard() {
     const bingo = document.createElement("div");
-    bingo.className = "bingo";
+    bingo.className = "bingo bingo-75";
 
-    // First: headers
+    // Headers
     letters.forEach(letter => {
       const header = document.createElement("div");
       header.textContent = letter;
@@ -128,20 +147,17 @@
       bingo.appendChild(header);
     });
 
-    // Generate all 5 columns with unique numbers
     const columnNumbers = {};
     letters.forEach(letter => {
       columnNumbers[letter] = getRandomNumbers(ranges[letter][0], ranges[letter][1], 5);
     });
 
-    // Fill 5 rows (row by row, left to right)
     for (let r = 0; r < 5; r++) {
       for (let c = 0; c < 5; c++) {
         const letter = letters[c];
         const cell = document.createElement("div");
 
         if (c === 2 && r === 2) {
-          // FREE space in middle
           cell.textContent = "FREE";
           cell.className = "cell marked";
         } else {
@@ -155,16 +171,66 @@
     return bingo;
   }
 
+  function create90BallCard() {
+    const bingo = document.createElement("div");
+    bingo.className = "bingo bingo-90";
+
+    // 90-ball: 9 columns × 3 rows, 5 numbers per row, others blank
+    const numbers = getRandomNumbers(1, 90, 15).sort((a, b) => a - b);
+    const rows = [[], [], []];
+
+    // Distribute numbers across rows
+    let index = 0;
+    for (let r = 0; r < 3; r++) {
+      // Choose 5 positions for numbers
+      const positions = getRandomNumbers(0, 8, 5);
+      for (let c = 0; c < 9; c++) {
+        const cell = document.createElement("div");
+        if (positions.includes(c)) {
+          cell.textContent = numbers[index++];
+          cell.className = "cell";
+          cell.addEventListener("click", () => cell.classList.toggle("marked"));
+        } else {
+          cell.textContent = "";
+          cell.className = "cell";
+          cell.style.background = "#fff"; // blank space
+        }
+        bingo.appendChild(cell);
+      }
+    }
+    return bingo;
+  }
+
+  function create30BallCard() {
+    const bingo = document.createElement("div");
+    bingo.className = "bingo bingo-30";
+
+    const numbers = getRandomNumbers(1, 30, 9);
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement("div");
+      cell.textContent = numbers[i];
+      cell.className = "cell";
+      cell.addEventListener("click", () => cell.classList.toggle("marked"));
+      bingo.appendChild(cell);
+    }
+    return bingo;
+  }
+
   function generateCards(count) {
+    const type = document.getElementById("gameType").value;
     const container = document.getElementById("cardsContainer");
     container.innerHTML = "";
     for (let i = 0; i < count; i++) {
-      container.appendChild(createBingoCard());
+      if (type === "75") container.appendChild(create75BallCard());
+      if (type === "90") container.appendChild(create90BallCard());
+      if (type === "30") container.appendChild(create30BallCard());
     }
   }
 
   const cardCount = document.getElementById("cardCount");
+  const gameType = document.getElementById("gameType");
   cardCount.addEventListener("change", () => generateCards(parseInt(cardCount.value)));
+  gameType.addEventListener("change", () => generateCards(parseInt(cardCount.value)));
   generateCards(1);
 </script>
 
